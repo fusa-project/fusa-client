@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "fusa-client"
+version = "0.1.0"
+description = "Client for FUSA Api"
+authors = ["Matias Aravena"]
+
+[tool.poetry.dependencies]
+python = "3.7"
+requests = "2.25.1"
+pydantic = "1.8.1"
+mutagen = "1.45.1"
+
+[tool.poetry.dev-dependencies]
+requests = "2.25.1"
+pydantic = "1.8.1"
+mutagen = "1.45.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
