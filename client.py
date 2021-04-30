@@ -5,19 +5,20 @@ from audio_converter import AudioFile, AudioInfo
 
 class FusaClient():
     def __init__(self, fusa_server:str):
+        self.fusa_server = fusa_server
         self._check_server_connection()
     
     def _check_server_connection(self) -> bool:
         endpoint = "health"
         uri = f"{self.fusa_server}/{endpoint}"
-        request = request.get(uri)
+        request = requests.get(uri)
         if request.status_code == 200:
             return True
         else:
             raise RuntimeError(f"Could not get connection to FUSA server at: \
                                 {self.fusa_server}, status code: {request.status_code}")
 
-    def add_audio(self, file_path:str=None,
+    def add_audio(self, file_path:str,
                         latitude:float,
                         longitude:float,
                         recorded_at: int):
@@ -38,7 +39,7 @@ class FusaClient():
         )
         endpoint = "add_audio"
         uri = f"{self.fusa_server}/{endpoint}"
-        request = request.post(uri, json=body_data.json())
+        request = requests.post(uri, data=body_data.json())
         #TODO: hacer clase logger generica
         if request.status_code != 200:
             raise RuntimeError(f"Could not get connection to FUSA server at: \
