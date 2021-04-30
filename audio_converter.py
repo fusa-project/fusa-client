@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import base64
 
 from mutagen.mp3 import MP3
+from mutagen.wave import WAVE
 
 @dataclass
 class AudioInfo:
@@ -27,20 +28,22 @@ class AudioFile():
         splited_path = file_path.split("/")
         file_name = splited_path[-1]
         format_name = file_name.split(".")[-1]
-        allowed_files_format = ["mp3"]
+        allowed_files_format = ["mp3", "wav"]
         if format_name not in allowed_files_format:
             raise RuntimeError(f"Format {format_name} not allowed!, allowed values are: {allowed_files_format}")
         return file_name, format_name
 
-    def _process_mp3_file(self, file_path:str):
-        audio = MP3(file_path)
-        self.duration = audio.info.length
-        self.size = os.stat(file_path).st_size
+    def _process_audio_file(self, file_path:str, format_name:str):
+        if format_name == "mp3":
+            audio = MP3(file_path)
+        elif format_name == "wav":
+            audio = WAVE(file_path)
+        self.duration = float(audio.info.length)
+        self.size = float(os.stat(file_path).st_size)
 
     def process_audio(self):
-        file_name, format_name = self._get_audio_name_and_format(self.file_path)
-        if format_name == "mp3":
-            self._process_mp3_file(self.file_path)
+        self.file_name, self.format_name = self._get_audio_name_and_format(self.file_path)
+        self._process_audio_file(self.file_path, self.format_name)
         return self
 
     def get_audio_info(self) -> AudioInfo:
