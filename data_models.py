@@ -4,7 +4,7 @@ class Audio(BaseModel):
     id: int
     filename: str
     file_path: str
-    duration: int
+    duration: float
     size: float
     data: str
     latitude: float
