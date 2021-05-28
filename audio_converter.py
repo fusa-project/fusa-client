@@ -38,8 +38,8 @@ class AudioFile():
         self.size = os.stat(file_path).st_size
 
     def process_audio(self):
-        file_name, format_name = self._get_audio_name_and_format(self.file_path)
-        if format_name == "mp3":
+        self.file_name, self.format_name = self._get_audio_name_and_format(self.file_path)
+        if self.format_name == "mp3":
             self._process_mp3_file(self.file_path)
         return self
 
