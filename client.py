@@ -18,7 +18,8 @@ class FusaClient():
             raise RuntimeError(f"Could not get connection to FUSA server at: \
                                 {self.fusa_server}, status code: {request.status_code}")
 
-    def add_audio(self, file_path:str,
+    def add_audio(self, id:int,
+                        file_path:str,
                         latitude:float,
                         longitude:float,
                         recorded_at: int):
@@ -27,7 +28,7 @@ class FusaClient():
         encoded_audio = audio_file.convert_audio_to_bytes_str()
         #TODO cachar de donde sacar el id
         body_data = Audio(
-            id=-1,
+            id=id,
             filename=audio_info.filename,
             file_path=audio_info.file_path,
             duration=audio_info.duration,
