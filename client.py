@@ -1,7 +1,7 @@
 import requests
 
-from data_models import Audio
-from audio_converter import AudioFile, AudioInfo
+from data_models import AudioSchema, UserSchema, TagSchema, ParentSchema
+from audio_converter import AudioFile
 
 class FusaClient():
     def __init__(self, fusa_server:str):
@@ -18,27 +18,50 @@ class FusaClient():
             raise RuntimeError(f"Could not get connection to FUSA server at: \
                                 {self.fusa_server}, status code: {request.status_code}")
 
-    def add_audio(self, id:int,
-                        file_path:str,
-                        latitude:float,
-                        longitude:float,
-                        recorded_at: int):
+    def add_audio(self, file_path:str,
+                        recorded_at: int,
+                        uploaded_at: int,
+                        latitude: float,
+                        longitude: float,
+                        has_parent: bool,
+                        user_category: str,
+                        username: str,
+                        tags: list,
+                        parent_id: str,
+                        parent_chunk: list):
         audio_file = AudioFile(file_path).process_audio()
         audio_info = audio_file.get_audio_info()
         encoded_audio = audio_file.convert_audio_to_bytes_str()
-        #TODO cachar de donde sacar el id
-        body_data = Audio(
-            id=id,
-            filename=audio_info.filename,
-            file_path=audio_info.file_path,
+
+        user=UserSchema(
+            category=user_category,
+            username=username
+        )
+        tags=[TagSchema(
+            username=username,
+            source_tags=tags
+        )]
+        parent=ParentSchema(
+            parent_id=parent_id,
+            parent_chunk=parent_chunk
+        )
+
+        body_data = AudioSchema(
+            name=audio_info.filename,
+            format=audio_info.format_name,
             duration=audio_info.duration,
             size=audio_info.size,
-            data=encoded_audio,
+            recorded_at=recorded_at,
+            uploaded_at=uploaded_at,
             latitude=latitude,
             longitude=longitude,
-            recorded_at=recorded_at,
+            data=encoded_audio,
+            has_parent=has_parent,
+            user=user,
+            tags=tags,
+            parent=parent,
         )
-        endpoint = "add_audio"
+        endpoint = "audios"
         uri = f"{self.fusa_server}/{endpoint}"
         request = requests.post(uri, data=body_data.json())
         #TODO: hacer clase logger generica
