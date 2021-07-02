@@ -4,7 +4,10 @@ from data_models import AudioSchema, UserSchema, TagSchema, ParentSchema
 from audio_converter import AudioFile
 
 class FusaClient():
-    def __init__(self, fusa_server:str):
+    def __init__(self, fusa_server:str, api_key:str=None):
+        if api_key == None:
+            raise ValueError("No api_key provided!")
+        self.api_key = api_key
         self.fusa_server = fusa_server
         self._check_server_connection()
     
@@ -63,8 +66,10 @@ class FusaClient():
         )
         endpoint = "audios"
         uri = f"{self.fusa_server}/{endpoint}"
-        request = requests.post(uri, data=body_data.json())
-        #TODO: hacer clase logger generica
+        headers = { "X-Api-Key": self.api_key }
+        request = requests.post(uri, data=body_data.json(), headers=headers)
         if request.status_code != 200:
             raise RuntimeError(f"Could not get connection to FUSA server at: \
                                 {self.fusa_server}, status code: {request.status_code}")
+        else request.status_code == 200:
+            return True
