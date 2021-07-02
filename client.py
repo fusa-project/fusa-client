@@ -68,8 +68,8 @@ class FusaClient():
         uri = f"{self.fusa_server}/{endpoint}"
         headers = { "X-Api-Key": self.api_key }
         request = requests.post(uri, data=body_data.json(), headers=headers)
-        if request.status_code != 200:
+        if request.status_code == 200:
+            return True
+        else:
             raise RuntimeError(f"Could not get connection to FUSA server at: \
                                 {self.fusa_server}, status code: {request.status_code}")
-        else request.status_code == 200:
-            return True
