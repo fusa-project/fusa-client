@@ -1,4 +1,5 @@
 from pydantic import BaseModel, conlist
+from typing import Optional
 
 class UserSchema(BaseModel):
     category: str
@@ -23,6 +24,6 @@ class AudioSchema(BaseModel):
     longitude: float
     data: str
     user: UserSchema
-    tags: conlist(TagSchema, min_items=1, max_items=None)
+    tags: Optional[conlist(TagSchema, min_items=1, max_items=None)]
     has_parent: bool
-    parent: ParentSchema
+    parent: Optional[ParentSchema]

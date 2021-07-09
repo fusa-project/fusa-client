@@ -40,14 +40,21 @@ class FusaClient():
             category=user_category,
             username=username
         )
-        tags=[TagSchema(
-            username=username,
-            source_tags=tags
-        )]
-        parent=ParentSchema(
-            parent_id=parent_id,
-            parent_chunk=parent_chunk
-        )
+
+        if tags == None: tags = None
+        else:
+            tags=[TagSchema(
+                username=username,
+                source_tags=tags
+            )]
+
+        if parent_id or parent_chunk == None:
+            parent = None
+        else:
+            parent=ParentSchema(
+                parent_id=parent_id,
+                parent_chunk=parent_chunk
+            )
 
         body_data = AudioSchema(
             name=audio_info.filename,
