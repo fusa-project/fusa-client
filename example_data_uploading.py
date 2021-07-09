@@ -14,12 +14,12 @@ for wav_file in os.listdir(files_folder):
         longitude = -73.29500 + random.uniform(-0.00099, 0.00099)
         recorded_at = int(time.time())
         uploaded_at = int(time.time()) + random.randint(10, 90)
-        has_parent = True
+        has_parent = False
         user_category = random.choice(["citizen", "sensor"])
         username = "username_" + str(random.randint(1, 99))
-        source_tags = random.sample(tag_options, random.randint(1, 5))
-        parent_id = random.randint(1, 99)
-        parent_chunk = [1, random.randint(2, 99)]
+        source_tags = None #random.sample(tag_options, random.randint(1, 5))
+        parent_id = None #random.randint(1, 99)
+        parent_chunk = None #[1, random.randint(2, 99)]
 
         client.add_audio(
             file_path, recorded_at, uploaded_at, latitude, longitude,
